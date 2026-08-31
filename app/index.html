@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your English Path — Curso de inglés desde cero</title>
+<!-- ?v=N rompe la caché del navegador: subir N con cada actualización del curso -->
+<link rel="stylesheet" href="css/style.css?v=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣️</text></svg>">
+</head>
+<body>
+
+<div id="app">
+  <nav id="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🗣️</div>
+      <div class="brand-text">
+        <div class="brand-title">Your</div>
+        <div class="brand-sub">English Path</div>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <a href="#/hoy" class="nav-link" data-route="hoy"><span class="nav-ico">☀️</span> Today</a>
+      <a href="#/curso" class="nav-link" data-route="curso"><span class="nav-ico">📚</span> Course</a>
+      <a href="#/practica" class="nav-link" data-route="practica"><span class="nav-ico">🎤</span> Practice</a>
+      <a href="#/progreso" class="nav-link" data-route="progreso"><span class="nav-ico">📈</span> Progress</a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="streak-widget" id="streakWidget">
+        <span class="streak-flame">🔥</span>
+        <div>
+          <div class="streak-days" id="streakDays">0</div>
+          <div class="streak-label">days in a row</div>
+        </div>
+      </div>
+      <div class="xp-widget">
+        <div class="xp-row">
+          <span id="levelLabel">Level 1</span>
+          <span id="xpLabel">0 XP</span>
+        </div>
+        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main"></main>
+</div>
+
+<div id="sessionOverlay" class="session-overlay hidden"></div>
+<div id="toastContainer"></div>
+
+<script src="js/speech.js?v=1"></script>
+<script src="js/store.js?v=1"></script>
+<script src="js/exercises.js?v=1"></script>
+<script src="js/session.js?v=1"></script>
+<script src="js/curriculum.js?v=1"></script>
+<script src="js/main.js?v=1"></script>
+</body>
+</html>
