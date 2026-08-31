@@ -76,7 +76,7 @@ body {
 .streak-widget.cold .streak-flame { filter: grayscale(1); opacity: 0.5; }
 
 .xp-widget { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; }
-.xp-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+.xp-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; white-space: nowrap; }
 .xp-row span:first-child { color: var(--accent); font-weight: 700; }
 .xp-bar { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
 .xp-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: 3px; transition: width 0.6s ease; }
