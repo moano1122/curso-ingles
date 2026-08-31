@@ -77,6 +77,19 @@
         ? `Racha de ${streak} día${streak > 1 ? "s" : ""} en juego. Con 20 minutos la defiendes.`
         : "Hoy es un buen día para empezar la cadena. Dale al botón y ya."}</p>
 
+      ${Store.needsBackup() ? `
+      <div class="card" style="border-color:var(--gold)">
+        <div class="row">
+          <span style="font-size:26px">💾</span>
+          <div style="flex:1;min-width:220px">
+            <strong>Haz un respaldo de tu progreso</strong>
+            <div class="muted">Llevas ${(Store.totalMinutes() / 60).toFixed(1)} h de trabajo guardadas solo en este navegador.
+            Un respaldo toma cinco segundos y te protege de un borrado accidental o de un cambio de PC.</div>
+          </div>
+          <a class="btn go" href="#/progreso">Ir a respaldar</a>
+        </div>
+      </div>` : ""}
+
       <div class="card hero-goal">
         <div class="big-emoji">🎯</div>
         <div style="flex:1">
@@ -349,6 +362,7 @@
     const exams = Object.entries(Store.state.examScores);
     const speaks = Object.values(Store.state.speakRecords);
     const avgSpeak = speaks.length ? Math.round(speaks.reduce((a, b) => a + b, 0) / speaks.length) : 0;
+    const snaps = Store.snapshots();
 
     main().innerHTML = `
       <h1>Progress</h1>
@@ -382,12 +396,57 @@
 
       <h2>Respaldo</h2>
       <div class="card">
-        <p class="muted">El progreso vive en este navegador. Si cambias de PC o de dirección (localhost vs. la web), empiezas de cero — a menos que uses esto.</p>
+        <p class="muted">El progreso vive en este navegador. Cada dirección (localhost y la web) guarda el suyo por separado.
+        Lo más cómodo para pasarlo de un PC a otro es el <strong>código de progreso</strong>: se copia y se pega, sin archivos.</p>
         <div class="row">
+          <button class="btn go" id="codeBtn">📋 Copiar código de progreso</button>
+          <button class="btn" id="pasteBtn">📥 Pegar un código</button>
           <button class="btn" id="expBtn">⬇ Descargar respaldo</button>
           <button class="btn" id="impBtn">⬆ Restaurar desde archivo</button>
           <input type="file" id="impFile" accept=".json" style="display:none">
-          <button class="btn ghost" id="resetBtn" style="margin-left:auto;color:var(--red)">Borrar todo</button>
+        </div>
+        <div id="codeSlot"></div>
+        ${Store.state.lastBackup ? `<p class="muted" style="margin-top:10px">Último respaldo descargado: ${Store.state.lastBackup}</p>` : ""}
+      </div>
+
+      <h2>Recuperar progreso</h2>
+      <div class="card">
+        <p class="muted">El curso guarda una <strong>instantánea por día</strong>, además de una copia espejo. Si algo se pierde o
+        se borra por error, se restaura desde aquí. Nada de esto se elimina al usar "Borrar todo".</p>
+        ${snaps.length ? `
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+            ${snaps.slice().reverse().slice(0, 12).map(s => {
+              const d = s.data || {};
+              const dias = Object.keys(d.completedDays || {}).length;
+              const horas = (Object.values(d.studyLog || {}).reduce((a, b) => a + b, 0) / 60).toFixed(1);
+              return `<div class="row" style="border-top:1px solid var(--border);padding-top:6px">
+                <div style="flex:1">
+                  <strong>${s.day}</strong> ${s.tag ? `<span class="day-tag">${esc(s.tag)}</span>` : ""}
+                  <div class="muted">${d.xp || 0} XP · ${dias} día${dias === 1 ? "" : "s"} completado${dias === 1 ? "" : "s"} · ${horas} h · racha ${(d.streak || {}).best || 0}</div>
+                </div>
+                <button class="btn small" data-restore="${s.t}">Restaurar</button>
+              </div>`;
+            }).join("")}
+          </div>` : `<p class="muted">Todavía no hay instantáneas — aparecen a medida que estudias.</p>`}
+
+        <h3>Si ya no queda nada que recuperar</h3>
+        <p class="muted">Cuando el navegador borró todos los datos del sitio no hay nada que rescatar. En ese caso se puede
+        reconstruir el progreso a mano: dime cuántos días del curso alcanzaste a completar y cuántos días seguidos llevabas.
+        No inventa historial — solo marca lo que confirmes.</p>
+        <div class="row">
+          <label class="muted">Días completados <input type="number" id="rbDays" min="0" max="70" value="0" style="width:80px"></label>
+          <label class="muted">Racha <input type="number" id="rbStreak" min="0" max="365" value="0" style="width:80px"></label>
+          <button class="btn" id="rbBtn">Reconstruir</button>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:var(--red)">
+        <h3 style="margin-top:0;color:var(--red)">Zona peligrosa</h3>
+        <p class="muted">Borra el progreso de este navegador. Antes de borrar se guarda una instantánea etiquetada,
+        así que se puede deshacer desde "Recuperar progreso" — pero no lo uses por curiosidad.</p>
+        <div class="row">
+          <input type="text" id="wipeWord" placeholder="Escribe BORRAR para habilitar" style="min-width:230px">
+          <button class="btn ghost" id="resetBtn" style="color:var(--red)" disabled>Borrar todo</button>
         </div>
       </div>`;
 
@@ -408,6 +467,55 @@
       a.href = URL.createObjectURL(blob);
       a.download = `ingles-progreso-${Store.todayStr()}.json`;
       a.click();
+      Store.markBackup();
+      toast("💾", "Respaldo descargado", "Guárdalo donde no se pierda");
+    });
+
+    /* Código de progreso: copiar / pegar entre equipos */
+    const codeSlot = document.getElementById("codeSlot");
+    document.getElementById("codeBtn").addEventListener("click", () => {
+      const code = Store.exportCode();
+      codeSlot.innerHTML = `<p class="muted" style="margin-top:12px">Copia todo este texto y pégalo en el otro PC con "Pegar un código":</p>
+        <textarea readonly style="width:100%;height:90px;background:var(--bg-raised);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:Consolas,monospace;font-size:12px">${code}</textarea>`;
+      const ta = codeSlot.querySelector("textarea");
+      ta.select();
+      if (navigator.clipboard) navigator.clipboard.writeText(code).then(
+        () => toast("📋", "Código copiado", "Ya lo puedes pegar en el otro PC"),
+        () => toast("📋", "Selecciónalo y copia con Ctrl+C", ""));
+      Store.markBackup();
+    });
+    document.getElementById("pasteBtn").addEventListener("click", () => {
+      codeSlot.innerHTML = `<p class="muted" style="margin-top:12px">Pega aquí el código que copiaste en el otro PC:</p>
+        <textarea id="pasteArea" style="width:100%;height:90px;background:var(--bg-raised);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:Consolas,monospace;font-size:12px" placeholder="ENG1:..."></textarea>
+        <div class="row" style="margin-top:8px"><button class="btn go" id="pasteGo">Restaurar desde el código</button></div>`;
+      codeSlot.querySelector("#pasteGo").addEventListener("click", () => {
+        try {
+          Store.importCode(codeSlot.querySelector("#pasteArea").value);
+          toast("✅", "Progreso restaurado", "Se guardó una instantánea del estado anterior");
+          route();
+        } catch (e) { toast("⚠️", "No se pudo restaurar", e.message); }
+      });
+    });
+
+    /* Restaurar una instantánea */
+    main().querySelectorAll("[data-restore]").forEach(b => {
+      b.addEventListener("click", () => {
+        try {
+          Store.restoreSnapshot(b.dataset.restore);
+          toast("↩️", "Progreso restaurado", "Volviste al estado de esa fecha");
+          route();
+        } catch (e) { toast("⚠️", "No se pudo restaurar", e.message); }
+      });
+    });
+
+    /* Reconstrucción manual */
+    document.getElementById("rbBtn").addEventListener("click", () => {
+      const days = Number(document.getElementById("rbDays").value) || 0;
+      const streak = Number(document.getElementById("rbStreak").value) || 0;
+      if (!days && !streak) { toast("🤔", "Pon al menos un número", ""); return; }
+      Store.manualRebuild({ daysDone: days, streak });
+      toast("🛠️", "Progreso reconstruido", `${days} día(s) marcados, racha ${streak}`);
+      route();
     });
     document.getElementById("impBtn").addEventListener("click", () => document.getElementById("impFile").click());
     document.getElementById("impFile").addEventListener("change", ev => {
@@ -420,11 +528,13 @@
       };
       r.readAsText(f);
     });
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      if (confirm("¿Borrar TODO el progreso de este navegador? No se puede deshacer.\n\nDescarga primero un respaldo si no estás seguro.")) {
-        localStorage.removeItem("ingles_progreso_v1");
-        location.reload();
-      }
+    const wipeWord = document.getElementById("wipeWord");
+    const resetBtn = document.getElementById("resetBtn");
+    wipeWord.addEventListener("input", () => { resetBtn.disabled = wipeWord.value.trim().toUpperCase() !== "BORRAR"; });
+    resetBtn.addEventListener("click", () => {
+      if (resetBtn.disabled) return;
+      Store.wipe();
+      location.reload();
     });
   }
 
@@ -454,4 +564,9 @@
   window.addEventListener("hashchange", route);
   window.UI = { toast, refreshSidebar, route };
   route();
+
+  // Si al arrancar hubo que rescatar el progreso, decirlo — en silencio no.
+  if (Store.recoveredFrom) {
+    setTimeout(() => toast("♻️", "Progreso recuperado", `La copia principal falló y se restauró desde ${Store.recoveredFrom}`), 600);
+  }
 })();

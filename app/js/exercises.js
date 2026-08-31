@@ -110,9 +110,12 @@
       paint();
       const item = items[i];
       const api = { resolve, showFeedback, btnCheck, btnNext, body };
-      currentApi = RENDERERS[item.kind](body, item, api, opts);
-      if (currentApi && currentApi.autoCheck) btnCheck.style.display = "none";
-      if (currentApi && currentApi.focus) setTimeout(() => currentApi.focus(), 30);
+      const mine = RENDERERS[item.kind](body, item, api, opts);
+      currentApi = mine;
+      if (mine && mine.autoCheck) btnCheck.style.display = "none";
+      // El foco va con retardo, así que hay que comprobar que el item
+      // no haya cambiado mientras tanto (avanzar rápido lo provocaba).
+      if (mine && mine.focus) setTimeout(() => { if (currentApi === mine) mine.focus(); }, 30);
     }
 
     btnCheck.addEventListener("click", () => { if (currentApi && currentApi.check) currentApi.check(); });

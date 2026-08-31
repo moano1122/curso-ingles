@@ -20,12 +20,12 @@
   /* ---------- Los 7 hitos del camino ---------- */
   const MILESTONES = [
     { id: "H1", label: "Introduce yourself", desc: "Decir quién eres, de dónde eres y a qué te dedicas — sin pensarlo", dayId: "d1", mod: "Module 0" },
-    { id: "H2", label: "Talk about your day", desc: "Contar tu rutina diaria en presente simple", dayId: "d10", mod: "Module 1" },
-    { id: "H3", label: "Tell what happened", desc: "Contar algo que te pasó ayer, en pasado, sin trabarte", dayId: "d24", mod: "Module 3" },
-    { id: "H4", label: "Survive out there", desc: "Pedir comida, preguntar direcciones, comprar, resolver un problema", dayId: "d34", mod: "Module 4" },
-    { id: "H5", label: "Talk about the future", desc: "Planes, intenciones y promesas: will, going to", dayId: "d44", mod: "Module 5" },
-    { id: "H6", label: "Understand real English", desc: "Entender un minuto de audio nativo sin subtítulos", dayId: "d54", mod: "Module 6" },
-    { id: "H7", label: "A 10-minute conversation", desc: "Conversación libre de 10 minutos sin cambiar al español", dayId: "d64", mod: "Module 7" },
+    { id: "H2", label: "Talk about your day", desc: "Contar tu rutina diaria en presente simple", dayId: "d14", mod: "Module 1" },
+    { id: "H3", label: "Tell what happened", desc: "Contar algo que te pasó ayer, en pasado, sin trabarte", dayId: "d32", mod: "Module 3" },
+    { id: "H4", label: "Survive out there", desc: "Pedir comida, preguntar direcciones, comprar, resolver un problema", dayId: "d42", mod: "Module 4" },
+    { id: "H5", label: "Talk about the future", desc: "Planes, intenciones y promesas: will, going to", dayId: "d50", mod: "Module 5" },
+    { id: "H6", label: "Understand real English", desc: "Entender un minuto de audio nativo sin subtítulos", dayId: "d58", mod: "Module 6" },
+    { id: "H7", label: "A 10-minute conversation", desc: "Conversación libre de 10 minutos sin cambiar al español", dayId: "d66", mod: "Module 7" },
   ];
 
   /* ---------- Los 12 verbos de la plana diaria ---------- */
@@ -580,33 +580,34 @@ que es lo que convierte un monólogo en una conversación.</div>
      Los días que vienen (aún sin construir)
      ============================================================ */
 
-  function soon(id, title, titleEs, goal) {
-    return { id, title, titleEs, goal, soon: true, canDo: [] };
-  }
-
   const M0 = {
     id: "m0", icon: "🌱",
     title: "Module 0 · Foundations",
-    sub: "Días 1-6 · Presentarte, preguntar, contar y describir. La base sobre la que va todo lo demás.",
-    days: [
-      DAY1,
-      soon("d2", "Day 2 · Numbers and questions", "Números, la hora y las preguntas WH-", "Preguntar what, where, who, how old y entender la respuesta."),
-      soon("d3", "Day 3 · This is my family", "La familia, los posesivos y el plural", "Describir a tu familia y usar my/your/his/her."),
-      soon("d4", "Day 4 · There is / There are", "Describir lugares y cosas a tu alrededor", "Decir qué hay y qué no hay en un sitio."),
-      soon("d5", "Day 5 · I like / I don't like", "Gustos, aficiones y el verbo LIKE", "Hablar de lo que te gusta y lo que odias."),
-      soon("d6", "Day 6 · Review + first big exam", "Repaso general y examen de módulo", "Aprobar el examen del módulo 0 con 80%."),
-    ],
+    sub: "Semana 1 · Presentarte, preguntar, contar y describir. La base sobre la que va todo lo demás.",
+    days: [DAY1].concat(window.DAYS_M0 || []),
   };
 
+  /* Los módulos que aún no están construidos. El plan completo son
+     ~11 semanas (unos 3 meses a 6 días por semana, 2 h diarias). */
   const LOCKED = [
-    { id: "m1", icon: "☀️", title: "Module 1 · Your daily life", sub: "Presente simple, rutinas, la tercera persona (-s) y adverbios de frecuencia", locked: true },
-    { id: "m2", icon: "💬", title: "Module 2 · Right now", sub: "Presente continuo, describir lo que pasa, y el inglés de las situaciones cotidianas", locked: true },
-    { id: "m3", icon: "🕰️", title: "Module 3 · The past", sub: "Pasado simple, verbos regulares e irregulares, contar historias", locked: true },
-    { id: "m4", icon: "🌎", title: "Module 4 · Out in the world", sub: "Restaurantes, direcciones, compras, aeropuerto, resolver problemas", locked: true },
-    { id: "m5", icon: "🚀", title: "Module 5 · The future", sub: "Will, going to, planes, promesas y condicionales básicos", locked: true },
-    { id: "m6", icon: "🎧", title: "Module 6 · Real English", sub: "Escucha de audio nativo, acentos, contracciones habladas, slang básico", locked: true },
-    { id: "m7", icon: "🗣️", title: "Module 7 · Conversation", sub: "Conversación libre, mantener el turno, ganar tiempo, sonar natural", locked: true },
+    { id: "m1", icon: "☀️", title: "Module 1 · Your daily life", sub: "Semana 2 (días 7-14) · Presente simple, rutinas, la -s de la tercera persona, adverbios de frecuencia y los días de la semana", locked: true },
+    { id: "m2", icon: "💬", title: "Module 2 · Right now", sub: "Semanas 3-4 (días 15-22) · Presente continuo, ropa y clima, el cuerpo, y el inglés de las situaciones cotidianas — cierra el mes 1", locked: true },
+    { id: "m3", icon: "🕰️", title: "Module 3 · The past", sub: "Semanas 5-6 (días 23-32) · Pasado simple, verbos regulares e irregulares, contar historias y anécdotas", locked: true },
+    { id: "m4", icon: "🌎", title: "Module 4 · Out in the world", sub: "Semanas 7-8 (días 33-42) · Restaurantes, direcciones, compras, aeropuerto, hotel y resolver problemas — cierra el mes 2", locked: true },
+    { id: "m5", icon: "🚀", title: "Module 5 · The future", sub: "Semana 9 (días 43-50) · Will, going to, planes, promesas y condicionales básicos", locked: true },
+    { id: "m6", icon: "🎧", title: "Module 6 · Real English", sub: "Semana 10 (días 51-58) · Escucha de audio nativo, acentos, contracciones habladas y phrasal verbs", locked: true },
+    { id: "m7", icon: "🗣️", title: "Module 7 · Conversation", sub: "Semanas 11-12 (días 59-66) · Conversación libre, mantener el turno, ganar tiempo y sonar natural — cierra el mes 3", locked: true },
   ];
+
+  /* Los bloques de planas declaran verbs: [] y se rellenan aquí, para
+     que la lista viva en un solo sitio. */
+  function fillVerbDrills(days) {
+    days.forEach(d => (d.blocks || []).forEach(b => {
+      if (b.ex && b.ex.type === "verbdrill" && (!b.ex.verbs || !b.ex.verbs.length)) b.ex.verbs = CORE_VERBS;
+    }));
+    return days;
+  }
+  fillVerbDrills(M0.days);
 
   window.Curriculum = {
     MILESTONES,
