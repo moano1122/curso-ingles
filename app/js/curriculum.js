@@ -589,8 +589,14 @@ que es lo que convierte un monólogo en una conversación.</div>
 
   /* Los módulos que aún no están construidos. El plan completo son
      ~11 semanas (unos 3 meses a 6 días por semana, 2 h diarias). */
+  const M1 = {
+    id: "m1", icon: "☀️",
+    title: "Module 1 · Your daily life",
+    sub: "Semana 2 (días 7-14) · Presente simple, la -s de la tercera persona, do/does, frecuencia, trabajo, tiempo libre y CAN.",
+    days: window.DAYS_M1 || [],
+  };
+
   const LOCKED = [
-    { id: "m1", icon: "☀️", title: "Module 1 · Your daily life", sub: "Semana 2 (días 7-14) · Presente simple, rutinas, la -s de la tercera persona, adverbios de frecuencia y los días de la semana", locked: true },
     { id: "m2", icon: "💬", title: "Module 2 · Right now", sub: "Semanas 3-4 (días 15-22) · Presente continuo, ropa y clima, el cuerpo, y el inglés de las situaciones cotidianas — cierra el mes 1", locked: true },
     { id: "m3", icon: "🕰️", title: "Module 3 · The past", sub: "Semanas 5-6 (días 23-32) · Pasado simple, verbos regulares e irregulares, contar historias y anécdotas", locked: true },
     { id: "m4", icon: "🌎", title: "Module 4 · Out in the world", sub: "Semanas 7-8 (días 33-42) · Restaurantes, direcciones, compras, aeropuerto, hotel y resolver problemas — cierra el mes 2", locked: true },
@@ -608,11 +614,12 @@ que es lo que convierte un monólogo en una conversación.</div>
     return days;
   }
   fillVerbDrills(M0.days);
+  fillVerbDrills(M1.days);
 
   window.Curriculum = {
     MILESTONES,
     CORE_VERBS,
-    MODULES: [M0].concat(LOCKED),
+    MODULES: [M0, M1].concat(LOCKED),
     allDays() {
       return this.MODULES.filter(m => m.days).reduce((a, m) => a.concat(m.days.map(d => Object.assign({ moduleId: m.id }, d))), []);
     },

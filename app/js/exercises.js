@@ -550,13 +550,16 @@
   function verbdrill(spec, onDone) {
     const verbs = spec.verbs;
     const reps = spec.reps || 3;
+    const field = spec.field || "past";                 // qué columna se pide
+    const heads = spec.headers || ["Base form", "Past simple", "Español"];
+    const ph = spec.placeholder || "past...";
     const wrap = el(`
       <div class="ex-wrap">
         <div class="ex-head">
           <div class="ex-bar"><div class="ex-bar-fill" style="width:0%"></div></div>
           <div class="ex-count"></div>
         </div>
-        <div class="ex-prompt">Escribe el <strong>pasado</strong> de cada verbo. Cuando la ronda esté completa y correcta, empieza otra.
+        <div class="ex-prompt">${spec.prompt || "Escribe el <strong>pasado</strong> de cada verbo."} Cuando la ronda esté completa y correcta, empieza otra.
         Son <strong>${reps} rondas</strong> — es la plana de toda la vida, pero corrigiéndote al instante.</div>
         <div data-slot="table"></div>
         <div class="ex-feedback"><div class="fb-title"></div><div class="fb-text"></div></div>
@@ -582,12 +585,12 @@
       const order = round === 0 ? verbs : shuffle(verbs);
       slot.innerHTML = `
         <table class="drill-table">
-          <thead><tr><th>Base form</th><th>Past simple</th><th>Español</th></tr></thead>
+          <thead><tr><th>${esc(heads[0])}</th><th>${esc(heads[1])}</th><th>${esc(heads[2])}</th></tr></thead>
           <tbody>
             ${order.map((v, i) => `
               <tr>
                 <td style="width:26%"><strong>${esc(v.base)}</strong></td>
-                <td style="width:38%"><input type="text" data-i="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="past..."></td>
+                <td style="width:38%"><input type="text" data-i="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(ph)}"></td>
                 <td class="drill-es">${esc(v.es)}</td>
               </tr>`).join("")}
           </tbody>
@@ -603,7 +606,7 @@
     }
 
     wrap.querySelector('[data-act="listen"]').addEventListener("click", () => {
-      Speech.say(verbs.map(v => `${v.base}, ${v.past}.`).join(" "), { rate: 0.8 });
+      Speech.say(verbs.map(v => `${v.base}, ${v[field]}.`).join(" "), { rate: 0.8 });
     });
 
     wrap.querySelector('[data-act="check"]').addEventListener("click", () => {
@@ -612,10 +615,10 @@
       let wrong = 0;
       inputs.forEach((inp, i) => {
         const v = verbs.find(x => x.base === order[i]);
-        const ok = Speech.equals(inp.value, v.past, v.alts);
+        const ok = Speech.equals(inp.value, v[field], v.alts);
         inp.classList.remove("ok", "bad");
         inp.classList.add(ok ? "ok" : "bad");
-        if (!ok) { wrong++; inp.value = v.past; Store.seeWord(v.base, false); }
+        if (!ok) { wrong++; inp.value = v[field]; Store.seeWord(v.base, false); }
         else Store.seeWord(v.base, true);
       });
       fb.className = "ex-feedback show " + (wrong === 0 ? "ok" : "bad");
@@ -628,7 +631,7 @@
       if (round >= reps) {
         Store.verbDrillDone();
         fb.querySelector(".fb-title").textContent = "Drill complete! · ¡Plana terminada!";
-        fb.querySelector(".fb-text").innerHTML = "Hazla otra vez mañana. Diez días de esta plana y los verbos irregulares dejan de existir como problema.";
+        fb.querySelector(".fb-text").innerHTML = spec.done || "Hazla otra vez mañana. Diez días de esta plana y los verbos irregulares dejan de existir como problema.";
         wrap.querySelector('[data-act="check"]').textContent = "↻ Otra vez";
         round = 0;
         if (onDone) onDone({ correct: verbs.length * reps - wrong, total: verbs.length * reps, pct: 100 });

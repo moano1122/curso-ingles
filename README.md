@@ -34,7 +34,7 @@ Además: antes de borrar o restaurar siempre se guarda una instantánea etiqueta
 | Módulo | Días | Contenido | Mes |
 |---|---|---|---|
 | **0 · Foundations** | 1-6 | *to be*, preguntas WH-, familia, *there is/are*, gustos y *do/does* | 1 |
-| **1 · Your daily life** | 7-14 | Presente simple, rutinas, la -s de tercera persona, frecuencia | 1 |
+| **1 · Your daily life** | 7-14 | Presente simple, la -s de tercera persona, *do/does*, frecuencia, trabajo, tiempo libre, *can* | 1 |
 | **2 · Right now** | 15-22 | Presente continuo, ropa, clima, cuerpo, situaciones cotidianas | 1 |
 | **3 · The past** | 23-32 | Pasado simple, regulares e irregulares, contar historias | 2 |
 | **4 · Out in the world** | 33-42 | Restaurante, direcciones, compras, aeropuerto, hotel, problemas | 2 |
@@ -59,7 +59,7 @@ Además: antes de borrar o restaurar siempre se guarda una instantánea etiqueta
 | **Duolingo / Anki** | Racha diaria con umbral amable (20 min), XP y niveles, logros, repetición del vocabulario fallado |
 | **Ciencia del aprendizaje** | *Testing effect* (el examen enseña más que releer), repaso al día siguiente al inicio de cada sesión, práctica distribuida, descansos obligatorios |
 | **Enfoque comunicativo** | Se produce desde el día 1: hablar y escribir por encima de leer y reconocer |
-| **Listas de frecuencia** | Los verbos irregulares más usados como plana diaria (12, y 18 desde el día 6) |
+| **Listas de frecuencia** | Los verbos irregulares más usados como plana diaria (12 el día 1, 18 el día 6, 24 desde el módulo 1) |
 | **Errores típicos del hispanohablante** | Cada bloque de gramática señala los calcos del español que delatan el nivel (*"I have 30 years"*, *"Me like coffee"*, *"In my house have three rooms"*) |
 
 ## Estructura
@@ -75,9 +75,10 @@ Además: antes de borrar o restaurar siempre se guarda una instantánea etiqueta
 
 ## Estado
 
-- ✅ **Módulo 0 completo: días 1 a 6** (~120-135 min cada uno), con examen por día y examen grande de módulo (30 preguntas).
-- ✅ 78 bloques, ~500 ejercicios, ~90 palabras de vocabulario con audio.
+- ✅ **Módulos 0 y 1 completos: días 1 a 14** (~115-135 min cada uno), con examen por día y examen grande al cerrar cada módulo (30 y 35 preguntas).
+- ✅ 172 bloques y ~700 ejercicios verificados uno a uno; ~150 palabras de vocabulario con audio.
+- ✅ **Hito 1** (presentarte) y **hito 2** (contar tu día completo) construidos.
 - ✅ Speaking con calificación automática palabra por palabra (Chrome/Edge).
-- ✅ Plana diaria de verbos irregulares, siempre disponible en *Practice*.
+- ✅ Dos planas diarias: los 24 verbos irregulares más frecuentes y la **-s de tercera persona**.
 - ✅ Progreso a prueba de accidentes: copia espejo, instantáneas diarias y código de progreso.
-- ⏳ Módulos 1 a 7 pendientes de construir (días 7 a 66).
+- ⏳ Módulos 2 a 7 pendientes de construir (días 15 a 66).
